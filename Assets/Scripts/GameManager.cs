@@ -137,6 +137,7 @@ public class GameManager : MonoBehaviour {
             GameObject playerSpawn = Instantiate(player, spawnpoints[i].transform.position, transform.rotation) as GameObject;
             playerSpawn.name = "Player" + i;
             playerSpawn.GetComponent<Controls>().inputDevice = controllers[i];
+            playerSpawn.GetComponent<Controls>().id = i;
             players[i] = playerSpawn;
         }
     }
@@ -168,7 +169,7 @@ public class GameManager : MonoBehaviour {
     {
         originPosition = Camera.main.transform.position;
         originRotation = Camera.main.transform.rotation;
-        shake_intensity = .01f;
+        shake_intensity = .02f;
         shake_decay = 0.0003f;
     }
 

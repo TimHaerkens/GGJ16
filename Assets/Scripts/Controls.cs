@@ -21,6 +21,7 @@ public class Controls : MonoBehaviour
     public GameObject sprite;
 
     //Character stats
+    public int id = 0;
     float speed = 5f; //How fast the player can go
     float range = 1f; //Pickup range
     public float level = 0;
@@ -51,12 +52,12 @@ public class Controls : MonoBehaviour
         if(level==0)
         {
             sprite.GetComponent<SpriteRenderer>().color = Color.white;
-            sprite.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+            sprite.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
         }
         if (level == 1)
         {
             sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0f);
-            sprite.transform.localScale = new Vector3(3.2f, 3.2f, 3.2f);
+            sprite.transform.localScale = new Vector3(3f, 3f, 3f);
         }
         if (level == 2)
         {
@@ -139,7 +140,7 @@ public class Controls : MonoBehaviour
 
         if (pickedUp || sacrificed)
         {
-            if (carry) PutDown(carry);
+            //if (carry) PutDown(carry);
             agent.enabled = false;
         }
         else
@@ -176,49 +177,86 @@ public class Controls : MonoBehaviour
             }
             else
             {
+                
                 GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-                foreach (GameObject p in players)
-                {
-                    if (p != null && Vector2.Distance(p.transform.position, transform.position) < range && level >= 3)
-                    {
-                        PickUp(p);
-                        break;
-                    }
-                }
                 GameObject[] animals1 = GameObject.FindGameObjectsWithTag("Animal1");
-                foreach (GameObject a in animals1)
-                {
-                    if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 0)
-                    {
-                        PickUp(a);
-                        break;
-                    }
-                }
                 GameObject[] animals2 = GameObject.FindGameObjectsWithTag("Animal2");
-                foreach (GameObject a in animals2)
+                GameObject[] animals3 = GameObject.FindGameObjectsWithTag("Animal3");
+
+                if (carry == null)
                 {
-                    if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 1)
+                    foreach (GameObject p in players)
                     {
-                        PickUp(a);
-                        break;
+                        if (p!=this.gameObject && p != null && Vector2.Distance(p.transform.position, transform.position) < range && level >= 3)
+                        {
+                            AudioManager.instance.pickupPlayers[p.GetComponent<Controls>().id].start();
+                            PickUp(p);
+                            break;
+                        }
                     }
                 }
-                GameObject[] animals3 = GameObject.FindGameObjectsWithTag("Animal3");
-                foreach (GameObject a in animals3)
+                if (carry == null)
                 {
-                    if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 2)
-                    { 
-                        PickUp(a);
-                        break;
+                    foreach (GameObject a in animals1)
+                    {
+                        if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 0)
+                        {
+                            AudioManager.instance.pickup1.start();
+                            PickUp(a);
+                            break;
+                        }
+                    }
+                }
+                if (carry == null)
+                {
+                    foreach (GameObject a in animals2)
+                    {
+                        if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 1)
+                        {
+                            AudioManager.instance.pickup2.start();
+                            PickUp(a);
+                            break;
+                        }
+                    }
+                }
+                if (carry == null)
+                {
+                    foreach (GameObject a in animals3)
+                    {
+                        if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 2)
+                        {
+                            AudioManager.instance.pickup3.start();
+                            PickUp(a);
+                            break;
+                        }
                     }
                 }
             }
         }
 
-       
+
+        if (sacrificed)
+        {
+            Disappear();
+            transform.position -= new Vector3(0, Time.deltaTime, 0);
+        }
+
     }
 
-    
+    void Disappear()
+    {
+        Color currColor = sprite.GetComponent<SpriteRenderer>().color;
+        sprite.GetComponent<SpriteRenderer>().color = new Color(currColor.r, currColor.g, currColor.b, currColor.a - Time.deltaTime * 4);
+        if (currColor.a <= 0)
+        {
+            GameManager.instance.Barf();
+            GameManager.instance.Shake();
+            Destroy(this.gameObject);
+        }
+    }
+
+
+
 
     void Carry()
     {
@@ -283,11 +321,16 @@ public class Controls : MonoBehaviour
 
     void PickUp(GameObject who)
     {
-        if (who.tag != "Player")
+        AudioManager.instance.pickup.start();
+
+        if (who.tag == "Player")
         {
-            who.GetComponent<Controls>().pickedUp = true;
-            who.GetComponent<Controls>().carrier = this.gameObject;
-            who.GetComponent<Controls>().agent.Stop();
+            GameObject whoTemp = who;
+            if (who.GetComponent<Controls>().pickedUp) whoTemp = who.GetComponent<Controls>().carrier;
+
+            whoTemp.GetComponent<Controls>().pickedUp = true;
+            whoTemp.GetComponent<Controls>().carrier = this.gameObject;
+            whoTemp.GetComponent<Controls>().agent.Stop();
         }
         else //picking up animal
         {
@@ -315,15 +358,27 @@ public class Controls : MonoBehaviour
         handicapY = 0;
         handicapX = 0;
 
+        AudioManager.instance.drop.start();
+
         transform.eulerAngles = new Vector3(0, 0, 0);
 
         //IN THE HOLE????
         #region throwing in the hole
         if (nearHole())
         {
-            who.GetComponent<Animal>().sacrificed = true;
+            if (who.tag == "Player")//Threw in player
+            {
+                AudioManager.instance.diePlayers[who.GetComponent<Controls>().id].start();
+                who.GetComponent<Controls>().sacrificed = true;
+                who.transform.position = hole.transform.position + new Vector3(0, 0.1f, 0);
+                who.GetComponent<Controls>().pickedUp = false;
+                carry = null;
+                who.GetComponent<Controls>().carrier = null;
+                //This player is now out of the game                
+            }
             if (who.tag == "Animal1" || who.tag == "Animal2" || who.tag == "Animal3")
             {
+                who.GetComponent<Animal>().sacrificed = true;
                 who.transform.position = hole.transform.position + new Vector3(0, 0.1f, 0);
                 who.GetComponent<Animal>().pickedUp = false;
                 carry = null;
@@ -331,6 +386,7 @@ public class Controls : MonoBehaviour
             //Leveling
             if(who.tag=="Animal1")//Threw in chicken
             {
+                AudioManager.instance.die1.start();
                 if (level == 0)
                 {
                     progress += 0.34f;
@@ -343,6 +399,7 @@ public class Controls : MonoBehaviour
             }
             if (who.tag == "Animal2")//Threw in boar
             {
+                AudioManager.instance.die2.start();
                 if (level == 1)
                 {
                     progress += 0.5f;
@@ -355,6 +412,7 @@ public class Controls : MonoBehaviour
             }
             if (who.tag == "Animal3")//Threw in bull
             {
+                AudioManager.instance.die3.start();
                 if (level == 2)
                 {
                     progress += 1f;
@@ -365,14 +423,7 @@ public class Controls : MonoBehaviour
                     //Wrong animal
                 }
             }
-            if (who.tag == "Player")//Threw in player
-            {
-                who.transform.position = hole.transform.position + new Vector3(0, 0.1f, 0);
-                who.GetComponent<Controls>().pickedUp = false;
-                carry = null;
-                who.GetComponent<Controls>().carrier = null;
-                //This player is now out of the game                
-            }
+            
         }
         #endregion 
         else
