@@ -23,6 +23,7 @@ public class Animal : MonoBehaviour {
     Quaternion originRotation;
 
     public GameObject sprite;
+    public SpriteRenderer ButtonA;
 
     void Awake()
     {
@@ -106,9 +107,18 @@ public class Animal : MonoBehaviour {
         speedChecker++;
     }
 
+    bool intro = true;
     void Update ()
     {
         if (spawn) Spawn();
+        if(intro && tag == "Animal1")
+        {
+            if (GameManager.instance.intensity > 0)
+            {
+                intro = false;
+                ButtonA.enabled = false;
+            }
+        }
 
         //Wiggle();
         if (pickedUp || sacrificed || spawn)

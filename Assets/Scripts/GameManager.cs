@@ -161,6 +161,15 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    public int intensity = 0;
+    public void MoreIntense(int newIntensity)
+    {
+        //Intensity can only increase
+        if (newIntensity > intensity)
+            music.setParameterValue("Tension", newIntensity);
+        intensity = newIntensity;
+    }
+
     private Vector3 originPosition;
     private Quaternion originRotation;
     public float shake_decay;

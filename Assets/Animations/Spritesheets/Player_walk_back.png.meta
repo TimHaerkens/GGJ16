@@ -1,13 +1,19 @@
 fileFormatVersion: 2
 guid: 467abcab7e327db43b1e27f97a645c43
-timeCreated: 1454183770
+timeCreated: 1454199428
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Player_walk_back_0
+    21300002: Player_walk_back_1
+    21300004: Player_walk_back_2
+    21300006: Player_walk_back_3
+    21300008: Player_walk_back_4
+    21300010: Player_walk_back_5
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -26,11 +32,11 @@ TextureImporter:
   cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
-    aniso: -1
+    filterMode: 0
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -38,7 +44,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +55,129 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: Player_walk_back_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -4, y: 47.8}
+        - {x: -18, y: 38.8}
+        - {x: -18, y: 24.8}
+        - {x: -9, y: -3.2000008}
+        - {x: 0, y: -3.2000008}
+        - {x: 18, y: 9.799999}
+        - {x: 18, y: 38.8}
+        - {x: 4, y: 47.8}
+    - name: Player_walk_back_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 2, y: 7.799999}
+        - {x: 9, y: 1.7999992}
+        - {x: 9, y: -1.2000008}
+        - {x: 14, y: -3.2000008}
+        - {x: 15, y: -3.2000008}
+        - {x: 19, y: 1.7999992}
+        - {x: 19, y: 39.8}
+        - {x: 15, y: 46.8}
+        - {x: -18, y: 46.8}
+        - {x: -18, y: -3.2000008}
+        - {x: 4, y: -3.2000008}
+        - {x: 7, y: 0.79999924}
+        - {x: 7, y: 3.7999992}
+        - {x: 4, y: 4.799999}
+    - name: Player_walk_back_2
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 3, y: 49.8}
+        - {x: -9, y: 49.8}
+        - {x: -18, y: 43.8}
+        - {x: -18, y: 24.8}
+        - {x: -11, y: -2.2000008}
+        - {x: -9, y: -3.2000008}
+        - {x: 1, y: -3.2000008}
+        - {x: 9, y: -1.2000008}
+        - {x: 18, y: 2.7999992}
+        - {x: 18, y: 39.8}
+    - name: Player_walk_back_3
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 47.8}
+        - {x: -19, y: 41.8}
+        - {x: -19, y: -4.200001}
+        - {x: 18, y: -4.200001}
+        - {x: 18, y: 39.8}
+        - {x: 4, y: 47.8}
+    - name: Player_walk_back_4
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8, y: 46.8}
+        - {x: -18, y: 35.8}
+        - {x: -18, y: 6.799999}
+        - {x: -9, y: -2.2000008}
+        - {x: 5, y: -2.2000008}
+        - {x: 18, y: 26.8}
+        - {x: 18, y: 38.8}
+        - {x: 5, y: 46.8}
+    - name: Player_walk_back_5
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8, y: 48.8}
+        - {x: -18, y: 39.8}
+        - {x: -18, y: 13.799999}
+        - {x: -17, y: 6.799999}
+        - {x: -14, y: -0.20000076}
+        - {x: -11, y: -2.2000008}
+        - {x: 4, y: -2.2000008}
+        - {x: 18, y: 23.8}
+        - {x: 18, y: 42.8}
+        - {x: 7, y: 48.8}
     outline: []
   spritePackingTag: 
   userData: 

@@ -44,6 +44,8 @@ public class Controls : MonoBehaviour
     void Awake()
     {
         hole = GameObject.Find("hole");
+        
+
     }
 
     
@@ -126,9 +128,13 @@ public class Controls : MonoBehaviour
     float rotateSpeed = 550;
     public GameObject pointer;
     public Vector2 lookDirection = new Vector2(0.93f, -0.35f);
+    float lookX;
+    float lookY;
     void Direction()
     {
-        lookDirection = new Vector2(inputDevice.LeftStickX, inputDevice.LeftStickY);
+        if (Mathf.Abs(inputDevice.LeftStickX) > 0.2f) lookX = inputDevice.LeftStickX;
+        if (Mathf.Abs(inputDevice.LeftStickY) > 0.2f) lookY = inputDevice.LeftStickY;
+        lookDirection = new Vector2(lookX, lookY);
         float rot = -Mathf.Atan2(lookDirection.x, lookDirection.y) * 180 / Mathf.PI;
         float newZ = Mathf.MoveTowardsAngle(pointer.transform.localEulerAngles.z, rot, rotateSpeed * Time.deltaTime);
         pointer.transform.localEulerAngles = new Vector3(pointer.transform.localEulerAngles.x, pointer.transform.localEulerAngles.y, newZ);
@@ -156,6 +162,7 @@ public class Controls : MonoBehaviour
         }
         else
         {
+
             Direction();
             Movement();
             Carry();
@@ -322,16 +329,29 @@ public class Controls : MonoBehaviour
     }
 
 
+    
+
     void LevelUp()
     {
         level += 1;
         Debug.Log("level up to: " + level);
         progress = 0;
         UpdateVisuals();
-        if (level == 1) { GameManager.instance.unlock2 = true; Debug.Log("Unlock 2"); }
-        if (level == 2) { GameManager.instance.unlock3 = true; Debug.Log("Unlock 3"); }
-        if (level == 3) { GameManager.instance.unlock4 = true; Debug.Log("Unlock 4"); }
-        if (level == 3) GameManager.instance.music.setParameterValue("Tension", 1);
+        if (level == 1)
+        {
+            GameManager.instance.unlock2 = true;
+        }
+        if (level == 2)
+        {
+            GameManager.instance.MoreIntense(2);
+            GameManager.instance.unlock3 = true;
+        }
+        if (level == 3)
+        {
+            GameManager.instance.MoreIntense(3);
+            GameManager.instance.unlock4 = true;
+        }
+         
         
     }
 
@@ -406,6 +426,7 @@ public class Controls : MonoBehaviour
             //Leveling
             if(who.tag=="Animal1")//Threw in chicken
             {
+                GameManager.instance.MoreIntense(1);//Try to increase? to 1
                 AudioManager.instance.die1.start();
                 if (level == 0)
                 {

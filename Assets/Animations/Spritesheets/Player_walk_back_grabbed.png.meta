@@ -1,13 +1,19 @@
 fileFormatVersion: 2
 guid: 22b878eb4125a0d4e8509dad5257aacc
-timeCreated: 1454183770
+timeCreated: 1454199450
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Player_walk_back_grabbed_0
+    21300002: Player_walk_back_grabbed_1
+    21300004: Player_walk_back_grabbed_2
+    21300006: Player_walk_back_grabbed_3
+    21300008: Player_walk_back_grabbed_4
+    21300010: Player_walk_back_grabbed_5
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -26,11 +32,11 @@ TextureImporter:
   cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
-    aniso: -1
+    filterMode: 0
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -38,7 +44,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +55,138 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: Player_walk_back_grabbed_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 54.8}
+        - {x: -19, y: 53.8}
+        - {x: -19, y: 18.8}
+        - {x: -12, y: -3.2000008}
+        - {x: 8, y: -3.2000008}
+        - {x: 17, y: 1.7999992}
+        - {x: 17, y: 36.8}
+        - {x: 16, y: 39.8}
+        - {x: 8, y: 52.8}
+        - {x: 6, y: 54.8}
+    - name: Player_walk_back_grabbed_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 2, y: 7.799999}
+        - {x: 9, y: 1.7999992}
+        - {x: 9, y: -1.2000008}
+        - {x: 14, y: -3.2000008}
+        - {x: 15, y: -3.2000008}
+        - {x: 19, y: 1.7999992}
+        - {x: 19, y: 4.799999}
+        - {x: 18, y: 11.799999}
+        - {x: 18, y: 30.8}
+        - {x: 9, y: 53.8}
+        - {x: -10, y: 53.8}
+        - {x: -19, y: 47.8}
+        - {x: -19, y: 26.8}
+        - {x: -13, y: -2.2000008}
+        - {x: -9, y: -3.2000008}
+        - {x: 4, y: -3.2000008}
+        - {x: 7, y: 0.79999924}
+        - {x: 7, y: 3.7999992}
+        - {x: 4, y: 4.799999}
+    - name: Player_walk_back_grabbed_2
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 17, y: 41.8}
+        - {x: 8, y: 53.8}
+        - {x: 2, y: 55.8}
+        - {x: -13, y: 55.8}
+        - {x: -19, y: 53.8}
+        - {x: -19, y: 4.799999}
+        - {x: -17, y: -3.2000008}
+        - {x: 1, y: -3.2000008}
+        - {x: 9, y: -1.2000008}
+        - {x: 17, y: 3.7999992}
+    - name: Player_walk_back_grabbed_3
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 53.8}
+        - {x: -19, y: 45.8}
+        - {x: -19, y: 8.799999}
+        - {x: -13, y: -4.200001}
+        - {x: 7, y: -4.200001}
+        - {x: 15, y: 21.8}
+        - {x: 15, y: 38.8}
+        - {x: 10, y: 53.8}
+    - name: Player_walk_back_grabbed_4
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 52.8}
+        - {x: -19, y: 45.8}
+        - {x: -19, y: 6.799999}
+        - {x: -6, y: -1.2000008}
+        - {x: -3, y: -2.2000008}
+        - {x: 5, y: -2.2000008}
+        - {x: 15, y: 18.8}
+        - {x: 15, y: 38.8}
+        - {x: 10, y: 52.8}
+    - name: Player_walk_back_grabbed_5
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 96
+        height: 96
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 54.8}
+        - {x: -19, y: 48.8}
+        - {x: -19, y: 12.799999}
+        - {x: -14, y: -2.2000008}
+        - {x: 8, y: -2.2000008}
+        - {x: 11, y: 0.79999924}
+        - {x: 15, y: 14.799999}
+        - {x: 15, y: 48.8}
+        - {x: 5, y: 54.8}
     outline: []
   spritePackingTag: 
   userData: 
