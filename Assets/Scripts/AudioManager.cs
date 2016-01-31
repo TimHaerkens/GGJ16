@@ -17,6 +17,10 @@ public class AudioManager : MonoBehaviour {
     public FMOD.Studio.EventInstance[] playerready = new FMOD.Studio.EventInstance[4];
 
 
+    public FMOD.Studio.EventInstance barf1;
+    public FMOD.Studio.EventInstance barf2;
+    public FMOD.Studio.EventInstance barf3;
+    public FMOD.Studio.EventInstance barf4;
 
 
 
@@ -46,7 +50,6 @@ public class AudioManager : MonoBehaviour {
         drop = RuntimeManager.CreateInstance("event:/Sounds/Players/Drop_sound");
 
 
-        
         diePlayers[0] = RuntimeManager.CreateInstance("event:/Sounds/Players/Player1_Die");
         diePlayers[1] = RuntimeManager.CreateInstance("event:/Sounds/Players/Player2_Die");
         diePlayers[2] = RuntimeManager.CreateInstance("event:/Sounds/Players/Player3_Die");

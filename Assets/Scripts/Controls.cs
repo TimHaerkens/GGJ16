@@ -45,32 +45,37 @@ public class Controls : MonoBehaviour
     void Awake()
     {
         hole = GameObject.Find("hole");
-
+        UpdateVisuals();
         
 
     }
 
     
-    void UpdateVisuals()
+    public void UpdateVisuals()
     {
         if(level==0)
         {
-            sprite.GetComponent<SpriteRenderer>().color = Color.white;
+            Debug.Log("Color me like one of your french girls");
+            Color tempColor = GameManager.instance.playerColors1[id];
+            sprite.GetComponent<SpriteRenderer>().color = tempColor;
             sprite.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
         }
         if (level == 1)
         {
-            sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0f);
+            Color tempColor = GameManager.instance.playerColors2[id];
+            sprite.GetComponent<SpriteRenderer>().color = tempColor;
             sprite.transform.localScale = new Vector3(3f, 3f, 3f);
         }
         if (level == 2)
         {
-            sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.6f, 0.2f);
+            Color tempColor = GameManager.instance.playerColors3[id];
+            sprite.GetComponent<SpriteRenderer>().color = tempColor;
             sprite.transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
         }
         if (level == 3)
         {
-            sprite.GetComponent<SpriteRenderer>().color = Color.red;
+            Color tempColor = GameManager.instance.playerColors4[id];
+            sprite.GetComponent<SpriteRenderer>().color = tempColor;
             sprite.transform.localScale = new Vector3(4f, 4f, 4f);
         }
     }
@@ -144,7 +149,8 @@ public class Controls : MonoBehaviour
     }
 
     float freedom = 0;
-    float freedomMinimum = 50;
+    float freedomMinimum = 150;
+    float wiggleBend = 0;
     void Update()
     {
 
@@ -157,6 +163,9 @@ public class Controls : MonoBehaviour
             if (!sacrificed)
             {
                 //Wiggle free
+                wiggleBend += inputDevice.LeftStickX*4;
+                wiggleBend = Mathf.Clamp(wiggleBend, -15, 15);
+                transform.eulerAngles = new Vector3(0, 0, 0+wiggleBend);
                 freedom += Mathf.Abs(inputDevice.LeftStickY) + Mathf.Abs(inputDevice.LeftStickX);
                 if (freedom > freedomMinimum) Free();
                 Carry();
@@ -178,11 +187,12 @@ public class Controls : MonoBehaviour
             Face();
         }
 
-        if (GameManager.instance.endGame && !GameManager.instance.finished)
+        if (GameManager.instance.endGame && !GameManager.instance.finished && !carry && !pickedUp)
         {
             ButtonA.enabled = true;
             ButtonA.sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
         }
+        else { ButtonA.enabled = false; }
 
         if (pickUpCooldown > 0) pickUpCooldown -= Time.deltaTime;
         if (pickUpCooldown < 0) pickUpCooldown = 0;
@@ -305,6 +315,7 @@ public class Controls : MonoBehaviour
             if (carry.tag == "Animal1") speed = 4.5f;
             if (carry.tag == "Animal2") speed = 3.5f;
             if (carry.tag == "Animal3") speed = 3f;
+            if (carry.tag == "Player") speed = 2f;
             carry.transform.position = transform.position + new Vector3(0, 1.4f, 0);
         }
         else speed = 5;
@@ -343,7 +354,7 @@ public class Controls : MonoBehaviour
 
     bool nearHole()
     {
-        if (Mathf.Abs(transform.position.x - hole.transform.position.x) < 2.5f && Mathf.Abs(transform.position.y - hole.transform.position.y) < 1.5f)
+        if (Mathf.Abs(transform.position.x - hole.transform.position.x) < 2.5f && Mathf.Abs(transform.position.y - hole.transform.position.y) < 1.8f)
             return true;
 
         return false;
@@ -507,6 +518,7 @@ public class Controls : MonoBehaviour
                 who.transform.position = transform.position + new Vector3(0.18f, -0.1f, 0);
                 who.GetComponent<Controls>().pickedUp = false;
                 who.GetComponent<Controls>().carrier = null;
+                who.transform.eulerAngles = new Vector3(0, 0, 0);
                 carry = null;
             }
         }
@@ -514,6 +526,7 @@ public class Controls : MonoBehaviour
 
     void Free()
     {
+        transform.eulerAngles = new Vector3(0, 0, 0);
         freedom = 0;
         transform.position = transform.position + new Vector3(0.18f, -0.1f, 0);
         pickedUp = false;

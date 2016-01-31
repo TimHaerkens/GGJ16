@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
     //FMOD
     public FMOD.Studio.EventInstance music;
-    public FMOD.Studio.EventInstance barf;
+    public FMOD.Studio.EventInstance countdown;
     FMOD.Studio.ParameterInstance tension;
 
     public GameObject[] animalSpawners;//animalSpawners in the game
@@ -17,13 +17,16 @@ public class GameManager : MonoBehaviour {
     //Players
     public List<GameObject> players;//All the players in the game
     public InputDevice[] controllers = new InputDevice[4] { null, null, null, null };
-
+    public Color[] playerColors1 = new Color[4];
+    public Color[] playerColors2 = new Color[4];
+    public Color[] playerColors3 = new Color[4];
+    public Color[] playerColors4 = new Color[4];
 
     //Resources
     public GameObject[] animalSpawns;//Animals that can be spawned
     public GameObject player;//A player that can be spawned
 
-    public GameObject pitButtonA;    public bool endGame = false;
+    public GameObject pitButtonA;    public GameObject pixelCamera;//Vignette effect overlay    public bool endGame = false;
 
     #region singleton
     private static GameManager Instance;
@@ -54,34 +57,62 @@ public class GameManager : MonoBehaviour {
         music.start();
         music.setParameterValue("Tension", 0);
 
-        barf = RuntimeManager.CreateInstance("event:/Sounds/Erupt_Human");
+        countdown = RuntimeManager.CreateInstance("event:/Sounds/Level_Select_Countdown");
+        
+
         intro = true;
 
     }
 
     public bool characterSelect = true;
-    float characterSelectTimer = 3;
+    float characterSelectTimer = 7;
     int playerAmount = 0;
     public GameObject[] charactersInMenu;
     public GameObject[] pressAInMenu;
+    public GameObject pressYInMenu;
     public GameObject menuCamera;
     float rotateTimer = 0;
+
+    public GameObject select1;
+    public GameObject select2;
+    public GameObject select3;
+    public GameObject select4;
+
+    public GameObject characterSelectTimerBar;
     void CharacterSelect()
     {
-        GameObject.Find("CharacterSelectTimer").transform.localScale = new Vector3(characterSelectTimer, 0.5f, 1);
+        //Move in
+        select1.transform.position -= new Vector3(0, (select1.transform.position.y-1.65f) * Time.deltaTime * 2,0);
+        select2.transform.position -= new Vector3(0, (select2.transform.position.y-1.65f) * Time.deltaTime * 2, 0);
+        select3.transform.position -= new Vector3(0, (select3.transform.position.y-1.65f) * Time.deltaTime * 2, 0);
+        select4.transform.position -= new Vector3(0, (select4.transform.position.y-1.65f) * Time.deltaTime * 2, 0);
+
+
+        characterSelectTimerBar.transform.localScale = new Vector3(characterSelectTimer, 0.5f, 1);
         rotateTimer += Time.deltaTime;
         for(int i = 0; i < 4; i++)
         {
             if (controllers[i] == null)
             {
+                
                 charactersInMenu[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
                 pressAInMenu[i].GetComponent<SpriteRenderer>().enabled = true;
-                if (Mathf.Round(rotateTimer) % 2 == 0) pressAInMenu[i].transform.eulerAngles += new Vector3(0, 0, Time.deltaTime*10);
-                else pressAInMenu[i].transform.eulerAngles += new Vector3(0, 0, -Time.deltaTime*10);
+                if (Mathf.Round(rotateTimer) % 2 == 0)
+                {
+                    pressAInMenu[i].transform.eulerAngles += new Vector3(0, 0, Time.deltaTime * 10);
+                    pressYInMenu.transform.eulerAngles += new Vector3(0, 0, Time.deltaTime * 2);
+                }
+                else
+                {
+                    pressAInMenu[i].transform.eulerAngles += new Vector3(0, 0, -Time.deltaTime * 10);
+                    pressYInMenu.transform.eulerAngles += new Vector3(0, 0, -Time.deltaTime * 2);
+                }
             }
             else
             {
-                charactersInMenu[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+                Color tempColor = playerColors1[i];
+                tempColor.a = 1f;
+                charactersInMenu[i].GetComponent<SpriteRenderer>().color = tempColor;
                 pressAInMenu[i].GetComponent<SpriteRenderer>().enabled = false;
             }
 
@@ -103,6 +134,7 @@ public class GameManager : MonoBehaviour {
                 {
                     if (controllers[i] == null)//Found spot
                     {
+                        if(i==0) countdown.start();
                         Debug.Log("This spot is free " + i);
                         potentialSpot = i;
                         break;//Stop finding a spot
@@ -120,7 +152,15 @@ public class GameManager : MonoBehaviour {
 
         }
 
-        if(controllers[0]!=null)characterSelectTimer -= Time.deltaTime;
+        if (controllers[0] != null)
+        {
+            //Timer begins
+            characterSelectTimer -= Time.deltaTime * (1+playerAmount/4);
+            Color tempColor = characterSelectTimerBar.GetComponent<SpriteRenderer>().color;
+            tempColor.a += Time.deltaTime;
+            characterSelectTimerBar.GetComponent<SpriteRenderer>().color = tempColor;
+
+        }
         if (characterSelectTimer < 0)
         {
             GameObject.Find("CharacterSelectTimer").GetComponent<SpriteRenderer>().enabled = false;
@@ -134,6 +174,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public bool finished = false;
+    public GameObject logo;
     public void Win()
     {
         MoreIntense(4);
@@ -142,21 +183,38 @@ public class GameManager : MonoBehaviour {
 
     void StartGame()
     {
-        for(int i = 0; i < playerAmount;i++)
+        countdown.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        for (int i = 0; i < playerAmount;i++)
         {
             GameObject playerSpawn = Instantiate(player, spawnpoints[i].transform.position, transform.rotation) as GameObject;
             playerSpawn.name = "Player" + i;
             playerSpawn.GetComponent<Controls>().inputDevice = controllers[i];
             playerSpawn.GetComponent<Controls>().id = i;
+            playerSpawn.GetComponent<Controls>().UpdateVisuals();
             players[i] = playerSpawn;
         }
     }
 
+    float finishTimer = 14;
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            if (!pixelCamera.GetComponent<SpriteRenderer>().enabled)
+                pixelCamera.GetComponent<SpriteRenderer>().enabled = true;
+            else
+                pixelCamera.GetComponent<SpriteRenderer>().enabled = false;
+        }
         SpriteLayering();
         ScreenShake();
         if(characterSelect)CharacterSelect();
+
+        if(finished)
+        {
+            finishTimer -= Time.deltaTime;
+            if(finishTimer < 7)logo.transform.position -= new Vector3(0, (logo.transform.position.y-1)/50, 0);
+            if (finishTimer <= 0) Application.LoadLevel(Application.loadedLevel);
+        }
     }
 
     void SpriteLayering()
@@ -211,11 +269,26 @@ public class GameManager : MonoBehaviour {
     public GameObject barfVFX;
     public void Barf(GameObject offer)
     {
-        if(offer.tag=="Animal1")barfVFX.GetComponent<Animator>().Play("barf1");
-        if(offer.tag=="Animal2")barfVFX.GetComponent<Animator>().Play("barf");
-        if(offer.tag=="Animal3")barfVFX.GetComponent<Animator>().Play("barf3");
-        if(offer.tag=="Player")barfVFX.GetComponent<Animator>().Play("barf4");
-        barf.start();
+        if (offer.tag == "Animal1")
+        {
+            barfVFX.GetComponent<Animator>().Play("barf1");
+            RuntimeManager.PlayOneShot("event:/Sounds/Erupt_Chicken", transform.position);
+        }
+        if (offer.tag == "Animal2")
+        {
+            barfVFX.GetComponent<Animator>().Play("barf");
+            RuntimeManager.PlayOneShot("event:/Sounds/Erupt_Pig", transform.position);
+        }
+        if (offer.tag=="Animal3")
+        {
+            barfVFX.GetComponent<Animator>().Play("barf3");
+            RuntimeManager.PlayOneShot("event:/Sounds/Erupt_Dolyak", transform.position);
+        }
+        if (offer.tag=="Player")
+        {
+            barfVFX.GetComponent<Animator>().Play("barf4");
+            RuntimeManager.PlayOneShot("event:/Sounds/Erupt_Human", transform.position);
+        }
     }
 
 
