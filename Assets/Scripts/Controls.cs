@@ -333,7 +333,7 @@ public class Controls : MonoBehaviour
     {
         if (carry != null)
         {
-            if(carry.tag=="Player")carry.GetComponent<Controls>().sprite.GetComponent<SpriteRenderer>().sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
+            if (carry.tag == "Player") carry.GetComponent<Controls>().sprite.GetComponent<SpriteRenderer>().sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
             else carry.GetComponent<Animal>().sprite.GetComponent<SpriteRenderer>().sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
             if (carry.tag == "Animal1") speed = 4.5f;
             if (carry.tag == "Animal2") speed = 3.5f;
@@ -341,7 +341,13 @@ public class Controls : MonoBehaviour
             if (carry.tag == "Player") speed = 2f;
             carry.transform.position = transform.position + new Vector3(0, 1.4f, 0);
         }
-        else speed = 5;
+        else
+        {
+            if(level==0)speed = 5;
+            if(level==1)speed = 4.5f;
+            if(level==2)speed = 3.5f;
+            if(level==3)speed = 2.5f;
+        }
     }
 
     float handicapX = 0;

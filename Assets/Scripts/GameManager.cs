@@ -79,9 +79,30 @@ public class GameManager : MonoBehaviour {
     public GameObject select3;
     public GameObject select4;
 
+
+    bool credits = false;
+    public GameObject creditsScreen;
     public GameObject characterSelectTimerBar;
     void CharacterSelect()
     {
+        if (InputManager.ActiveDevice.Action4.WasPressed)
+        {
+            if (credits) credits = false;
+            else credits = true;
+        }
+        if(credits)
+        {
+            Color tempColor = creditsScreen.GetComponent<SpriteRenderer>().color;
+            if(tempColor.a<1)tempColor.a += Time.deltaTime;
+            creditsScreen.GetComponent<SpriteRenderer>().color = tempColor;
+        }
+        else
+        {
+            Color tempColor = creditsScreen.GetComponent<SpriteRenderer>().color;
+            if(tempColor.a>0)tempColor.a -= Time.deltaTime;
+            creditsScreen.GetComponent<SpriteRenderer>().color = tempColor;
+        }
+
         //Move in
         select1.transform.position -= new Vector3(0, (select1.transform.position.y-1.65f) * Time.deltaTime * 2,0);
         select2.transform.position -= new Vector3(0, (select2.transform.position.y-1.65f) * Time.deltaTime * 2, 0);
@@ -216,12 +237,25 @@ public class GameManager : MonoBehaviour {
         if (finished)
         {
             finishTimer -= Time.deltaTime;
-            if (finishTimer < 7) logo.transform.position -= new Vector3(0, (logo.transform.position.y - 1) / 50, 0);
+            if (finishTimer < 7 && finishTimer > 1) logo.transform.position -= new Vector3(0, (logo.transform.position.y - 1) / 50, 0);
             if (finishTimer < 7 && eagle)
             {
                 RuntimeManager.PlayOneShot("event:/Sounds/Animals/Eagle", Camera.main.transform.position);
                 eagle = false;
             }
+            if (finishTimer < 1)
+            {
+                logo.transform.position -= new Vector3(80 * Time.deltaTime, 0, 0);
+                foreach(GameObject g in players)
+                {
+                    if (g != null)
+                    {
+                        g.GetComponent<Controls>().agent.enabled = false;
+                        g.transform.position -= new Vector3(80 * Time.deltaTime, 0, 0);
+                    }
+                }
+            }
+
             if (finishTimer <= 0) Application.LoadLevel(Application.loadedLevel);
         }
     }
