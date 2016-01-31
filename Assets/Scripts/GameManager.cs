@@ -89,6 +89,7 @@ public class GameManager : MonoBehaviour {
         //Go to character select
         if (InputManager.ActiveDevice.Action1.WasPressed)
         {
+            music.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             Application.LoadLevel(Application.loadedLevel);
         }
 
@@ -305,6 +306,7 @@ public class GameManager : MonoBehaviour {
             }
             if (finishTimer < 1)
             {
+                music.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 logo.transform.position -= new Vector3(80 * Time.deltaTime, 0, 0);
                 foreach(GameObject g in players)
                 {
