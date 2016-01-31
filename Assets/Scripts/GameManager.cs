@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour {
     public bool intro;
     void Awake()
     {
+        originalPosition = Camera.main.transform.position;
         firstBison = true;
         if (Instance == null)Instance = this;
         else
@@ -79,6 +80,26 @@ public class GameManager : MonoBehaviour {
     public GameObject select3;
     public GameObject select4;
 
+    public bool pause = false;
+    float pauseCooldown = 0;
+    void Pause()
+    {
+        //Time.timeScale = 0;
+
+        //Go to character select
+        if (InputManager.ActiveDevice.Action1.WasPressed)
+        {
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
+        //Go back to game
+        if (InputManager.ActiveDevice.Action2.WasPressed || InputManager.MenuWasPressed)
+        {
+            pauseCooldown = 0.5f;
+            pause = false;
+        }
+
+    }
 
     bool credits = false;
     public GameObject creditsScreen;
@@ -110,7 +131,7 @@ public class GameManager : MonoBehaviour {
         select4.transform.position -= new Vector3(0, (select4.transform.position.y-1.65f) * Time.deltaTime * 2, 0);
 
 
-        characterSelectTimerBar.transform.localScale = new Vector3(characterSelectTimer, 0.5f, 1);
+        characterSelectTimerBar.transform.localScale = new Vector3(characterSelectTimer/2, 2f, 1);
         rotateTimer += Time.deltaTime;
         for(int i = 0; i < 4; i++)
         {
@@ -156,7 +177,7 @@ public class GameManager : MonoBehaviour {
                 {
                     if (controllers[i] == null)//Found spot
                     {
-                        if(i==0) countdown.start();
+                        if(i==1) countdown.start();
                         Debug.Log("This spot is free " + i);
                         potentialSpot = i;
                         break;//Stop finding a spot
@@ -174,7 +195,7 @@ public class GameManager : MonoBehaviour {
 
         }
 
-        if (controllers[0] != null)
+        if (controllers[0] != null && controllers[1] != null)
         {
             //Timer begins
             characterSelectTimer -= Time.deltaTime * (1+playerAmount/4);
@@ -221,15 +242,54 @@ public class GameManager : MonoBehaviour {
 
     float finishTimer = 14;
     bool eagle = true;
+    public GameObject pauseBlack;
+    public GameObject pausePrompt;
+    Vector3 originalPosition;
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+
+        //Camera movement -9 to 9
+        float averageX = 0;
+        float averageAmount = 0;
+        float totalX = 0;
+        for(int i = 0; i < 4; i++)
         {
-            if (!pixelCamera.GetComponent<SpriteRenderer>().enabled)
-                pixelCamera.GetComponent<SpriteRenderer>().enabled = true;
-            else
-                pixelCamera.GetComponent<SpriteRenderer>().enabled = false;
+            if(players[i]!= null)
+            {
+                averageAmount++;
+                totalX += players[i].transform.position.x;                
+            }
         }
+        if(averageAmount!=0)averageX = totalX / averageAmount;
+        Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, originalPosition + new Vector3((averageX / 10), 0, 0), Time.deltaTime/5);
+
+
+
+        if (pauseCooldown > 0) pauseCooldown -= Time.deltaTime;
+        if(pause)
+        {
+            Pause();
+            Color tempColor = pauseBlack.GetComponent<SpriteRenderer>().color;
+            if (tempColor.a < 0.7f) tempColor.a += Time.deltaTime;
+            pauseBlack.GetComponent<SpriteRenderer>().color = tempColor;
+
+            pausePrompt.transform.position += new Vector3(0, (- pausePrompt.transform.position.y) * Time.deltaTime * 10, 0);
+        }
+        else
+        {
+            Color tempColor = pauseBlack.GetComponent<SpriteRenderer>().color;
+            if (tempColor.a > 0) tempColor.a -= Time.deltaTime;
+            pauseBlack.GetComponent<SpriteRenderer>().color = tempColor;
+
+            if(pausePrompt.transform.position.y > -8)pausePrompt.transform.position -= new Vector3(0, Time.deltaTime * 20, 0);
+        }
+
+        if (InputManager.MenuWasPressed && !pause && !characterSelect && pauseCooldown<=0)
+        {
+            Debug.Log("pause");
+            pause = true;
+        }
+
         SpriteLayering();
         ScreenShake();
         if(characterSelect)CharacterSelect();

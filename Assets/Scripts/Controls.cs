@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using InControl;
+using FMODUnity;
 
 [RequireComponent(typeof(PolyNavAgent))]
 public class Controls : MonoBehaviour
@@ -152,20 +153,27 @@ public class Controls : MonoBehaviour
     float freedom = 0;
     float freedomMinimum = 100;
     float wiggleBend = 0;
+    float maxSpeed = 5;
     void Update()
     {
-        if(carry==null)
+
+        if (level == 0) maxSpeed = 5;
+        if (level == 1) maxSpeed = 4.5f;
+        if (level == 2) maxSpeed = 3.5f;
+        if (level == 3) maxSpeed = 2.5f;
+
+        if (carry==null)
         {
             handicapY = 0;
             handicapX = 0;
         }
 
-        if (pickedUp || sacrificed || knockedOut)
+        if (pickedUp || sacrificed || knockedOut || GameManager.instance.pause)
         {
             //if (carry) PutDown(carry);
             agent.enabled = false;
 
-            if (!sacrificed && !knockedOut)
+            if (!sacrificed && !knockedOut && !GameManager.instance.pause)
             {
                 //Wiggle free
                 wiggleBend += inputDevice.LeftStickX*4;
@@ -289,6 +297,7 @@ public class Controls : MonoBehaviour
     void KnockOut(GameObject byWho)
     {
         knockedOut = true;
+        RuntimeManager.PlayOneShot("event:/Sounds/Players/Player_Fall", transform.position);
         Debug.Log(gameObject.name + " knocked out by " + byWho.name);
         if (byWho.transform.position.x > transform.position.x)//right of me
         {
@@ -328,25 +337,21 @@ public class Controls : MonoBehaviour
 
 
 
-
     void Carry()
     {
         if (carry != null)
         {
             if (carry.tag == "Player") carry.GetComponent<Controls>().sprite.GetComponent<SpriteRenderer>().sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
             else carry.GetComponent<Animal>().sprite.GetComponent<SpriteRenderer>().sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
-            if (carry.tag == "Animal1") speed = 4.5f;
-            if (carry.tag == "Animal2") speed = 3.5f;
-            if (carry.tag == "Animal3") speed = 3f;
+            if (carry.tag == "Animal1") speed = maxSpeed -0.2f;
+            if (carry.tag == "Animal2") speed = maxSpeed - 0.4f;
+            if (carry.tag == "Animal3") speed = maxSpeed - 0.5f;
             if (carry.tag == "Player") speed = 2f;
             carry.transform.position = transform.position + new Vector3(0, 1.4f, 0);
         }
         else
         {
-            if(level==0)speed = 5;
-            if(level==1)speed = 4.5f;
-            if(level==2)speed = 3.5f;
-            if(level==3)speed = 2.5f;
+            speed = maxSpeed;
         }
     }
 

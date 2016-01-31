@@ -67,22 +67,24 @@ public class Animal : MonoBehaviour {
     {
         if (spawnMove > 0)
         {
+            if (hole.transform.position.x < transform.position.x)
+            {
+                if (tag == "Animal1") anim.Play("bird_walkSW");
+                if (tag == "Animal2") anim.Play("boar_walkSW");
+                if (tag == "Animal3") anim.Play("yak_walkSW");
+            }
+            else
+            {
+                if (tag == "Animal1") anim.Play("bird_walkSE");
+                if (tag == "Animal2") anim.Play("boar_walkSE");
+                if (tag == "Animal3") anim.Play("yak_walkSE");
+            }
+
             if (transform.position.x < 0) transform.position += new Vector3(Time.deltaTime*3, 0, 0);
             if (transform.position.x > 0)
             {
                 transform.position -= new Vector3(Time.deltaTime * 3, 0, 0);
-                if (hole.transform.position.x < transform.position.x)
-                {
-                    if (tag == "Animal1") anim.Play("bird_walkSW");
-                    if (tag == "Animal2") anim.Play("boar_walkSW");
-                    if (tag == "Animal3") anim.Play("yak_walkSW");
-                }
-                else
-                {
-                    if (tag == "Animal1") anim.Play("bird_walkSE");
-                    if (tag == "Animal2") anim.Play("boar_walkSE");
-                    if (tag == "Animal3") anim.Play("yak_walkSE");
-                }
+                
             }
             spawnMove -= Time.deltaTime;
         }
@@ -98,15 +100,24 @@ public class Animal : MonoBehaviour {
     [System.NonSerialized]public float walkDirection;
     [System.NonSerialized]public string faceDirection = "SE";
     public bool walking;
+    public SpriteRenderer shadowNW;
+    public SpriteRenderer shadowNE;
+    public SpriteRenderer shadowSW;
+    public SpriteRenderer shadowSE;
     void Face()
     {
+        //First disable all shadows
+        shadowNW.enabled = false;
+        shadowNE.enabled = false;
+        shadowSW.enabled = false;
+        shadowSE.enabled = false;
         //FACE DIRECTION
-        if (walkDirection < 360 && walkDirection > 360 - 90) faceDirection = "NE";
-        else if (walkDirection < 180 + 90 && walkDirection > 180) faceDirection = "SE";
-        else if (walkDirection < 180 && walkDirection > 90) faceDirection = "SW";
-        else if (walkDirection < 90 && walkDirection > 0) faceDirection = "NW";
+        if (walkDirection < 360 && walkDirection > 360 - 90) { faceDirection = "NE"; shadowNE.enabled = true; }
+        else if (walkDirection < 180 + 90 && walkDirection > 180) { faceDirection = "SE"; shadowSE.enabled = true; }
+        else if (walkDirection < 180 && walkDirection > 90) { faceDirection = "SW"; shadowSW.enabled = true; }
+        else if (walkDirection < 90 && walkDirection > 0) { faceDirection = "NW"; shadowNW.enabled = true; }
 
-        if(walking)
+        if (walking)
         {
             if(tag=="Animal1")anim.Play("bird_walk" + faceDirection);
             if(tag=="Animal2")anim.Play("boar_walk" + faceDirection);
@@ -181,6 +192,15 @@ public class Animal : MonoBehaviour {
             if (!spawn && tag == "Animal1") anim.Play("bird_carried");
             if (!spawn && tag == "Animal2") anim.Play("boar_carried");
             if (!spawn && tag == "Animal3") anim.Play("yak_carried");
+
+            if(!spawn)
+            {
+                //First disable all shadows
+                shadowNW.enabled = false;
+                shadowNE.enabled = false;
+                shadowSW.enabled = false;
+                shadowSE.enabled = false;
+            }
         }
         else
         {
