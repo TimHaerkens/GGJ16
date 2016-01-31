@@ -186,7 +186,7 @@ public class Controls : MonoBehaviour
         }
 
         //Pickup button
-        if (inputDevice.GetControl(InputControlType.Action3) && pickUpCooldown==0)
+        if ((inputDevice.GetControl(InputControlType.Action1)|| inputDevice.GetControl(InputControlType.Action2)|| inputDevice.GetControl(InputControlType.Action3)|| inputDevice.GetControl(InputControlType.Action4)) && pickUpCooldown==0)
         {
             pickUpCooldown = 0.5f;
             if (carry != null)

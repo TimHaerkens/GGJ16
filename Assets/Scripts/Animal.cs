@@ -113,6 +113,7 @@ public class Animal : MonoBehaviour {
         if (spawn) Spawn();
         if(intro && tag == "Animal1")
         {
+            ButtonA.sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
             if (GameManager.instance.intensity > 0)
             {
                 intro = false;
