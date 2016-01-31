@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour {
     public GameObject[] animalSpawns;//Animals that can be spawned
     public GameObject player;//A player that can be spawned
 
-    
+    public GameObject pitButtonA;    public bool endGame = false;
 
     #region singleton
     private static GameManager Instance;
@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour {
     }
     #endregion
 
+    public bool intro;
     void Awake()
     {
         if (Instance == null)Instance = this;
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour {
         music.setParameterValue("Tension", 0);
 
         barf = RuntimeManager.CreateInstance("event:/Sounds/Erupt");
+        intro = true;
 
     }
 
@@ -131,6 +133,13 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    public bool finished = false;
+    public void Win()
+    {
+        MoreIntense(4);
+        finished = true;
+    }
+
     void StartGame()
     {
         for(int i = 0; i < playerAmount;i++)
@@ -206,6 +215,12 @@ public class GameManager : MonoBehaviour {
         barf.start();
     }
 
+
+    //Colors
+    public Color[] color1;
+    public Color[] color2;
+    public Color[] color3;
+
     //Spawning animals
     public bool unlock2 = false;//Unlock boars
     public bool unlock3 = false;//Unlock bizons
@@ -219,7 +234,7 @@ public class GameManager : MonoBehaviour {
         GameObject[] animals3 = GameObject.FindGameObjectsWithTag("Animal3");
 
         float probability1 = 60-(animals1.Length*15); if (unlock2) probability1 = 40 - (animals1.Length * 20);
-            float probability2 = 0; if(unlock2) probability2 = 20 - (animals2.Length * 7);
+        float probability2 = 0; if(unlock2) probability2 = 20 - (animals2.Length * 7);
         float probability3 = 0; if(unlock3) probability3 = 3 -(animals3.Length*3); if (unlock4) probability3 = 10 - (animals3.Length * 10);
 
         
@@ -231,25 +246,27 @@ public class GameManager : MonoBehaviour {
         //if (choice > probability1 && choice <= probability1+probability2) Debug.Log(choice+ ": Spawn Boar");
         //if (choice > probability1+probability2 && choice < probability1+probability2+probability3) Debug.Log(choice+ ": Spawn Bull");
 
-
-        if (choice > 0 && choice <= probability1)
+        if (!GameManager.instance.finished)
         {
-            GameManager.instance.animalSpawners[Random.Range(0, 6)].GetComponent<AnimalSpawner>().Spawn(GameManager.instance.animalSpawns[0]);
-            StartCoroutine(SpawnAnimal());
-        }
-        else if (choice > probability1 && choice <= probability1 + probability2)
-        {
-            GameManager.instance.animalSpawners[Random.Range(0, 6)].GetComponent<AnimalSpawner>().Spawn(GameManager.instance.animalSpawns[1]);
-            StartCoroutine(SpawnAnimal());
-        }
-        else if (choice > probability1 + probability2 && choice < probability1 + probability2 + probability3)
-        {
-            GameManager.instance.animalSpawners[Random.Range(0, 6)].GetComponent<AnimalSpawner>().Spawn(GameManager.instance.animalSpawns[2]);
-            StartCoroutine(SpawnAnimal());
-        }
-        else
-        {
-            StartCoroutine(SpawnAnimal());
+            if (choice > 0 && choice <= probability1)
+            {
+                GameManager.instance.animalSpawners[Random.Range(0, 6)].GetComponent<AnimalSpawner>().Spawn(GameManager.instance.animalSpawns[0]);
+                StartCoroutine(SpawnAnimal());
+            }
+            else if (choice > probability1 && choice <= probability1 + probability2)
+            {
+                GameManager.instance.animalSpawners[Random.Range(0, 6)].GetComponent<AnimalSpawner>().Spawn(GameManager.instance.animalSpawns[1]);
+                StartCoroutine(SpawnAnimal());
+            }
+            else if (choice > probability1 + probability2 && choice < probability1 + probability2 + probability3)
+            {
+                GameManager.instance.animalSpawners[Random.Range(0, 6)].GetComponent<AnimalSpawner>().Spawn(GameManager.instance.animalSpawns[2]);
+                StartCoroutine(SpawnAnimal());
+            }
+            else
+            {
+                StartCoroutine(SpawnAnimal());
+            }
         }
 
 

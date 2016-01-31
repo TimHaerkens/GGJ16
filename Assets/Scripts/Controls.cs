@@ -40,10 +40,12 @@ public class Controls : MonoBehaviour
     float pickUpCooldown = 0;
 
     GameObject hole;
+    public SpriteRenderer ButtonA;
 
     void Awake()
     {
         hole = GameObject.Find("hole");
+
         
 
     }
@@ -110,7 +112,7 @@ public class Controls : MonoBehaviour
         else if (walkDirection < 180 && walkDirection > 90) faceDirection = "SW";
         else if (walkDirection < 90 && walkDirection > 0) faceDirection = "NW";
 
-        if (walking)
+        if (walking && !anim.GetCurrentAnimatorStateInfo(0).IsTag("throw"))
         {
             if(carry)anim.Play("player_tilWalk" + faceDirection);
             else anim.Play("player_walk" + faceDirection);
@@ -176,6 +178,12 @@ public class Controls : MonoBehaviour
             Face();
         }
 
+        if (GameManager.instance.endGame)
+        {
+            ButtonA.enabled = true;
+            ButtonA.sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
+        }
+
         if (pickUpCooldown > 0) pickUpCooldown -= Time.deltaTime;
         if (pickUpCooldown < 0) pickUpCooldown = 0;
 
@@ -219,7 +227,8 @@ public class Controls : MonoBehaviour
                     {
                         if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 0)
                         {
-                            AudioManager.instance.pickup1.start();
+                            a.GetComponent<Animal>().pickup.start();
+                            if (GameManager.instance.intro) GameManager.instance.pitButtonA.GetComponent<SpriteRenderer>().enabled = true;
                             PickUp(a);
                             break;
                         }
@@ -231,7 +240,7 @@ public class Controls : MonoBehaviour
                     {
                         if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 1)
                         {
-                            AudioManager.instance.pickup2.start();
+                            a.GetComponent<Animal>().pickup.start();
                             PickUp(a);
                             break;
                         }
@@ -243,7 +252,7 @@ public class Controls : MonoBehaviour
                     {
                         if (a != null && Vector2.Distance(a.transform.position, transform.position) < range && level >= 2)
                         {
-                            AudioManager.instance.pickup3.start();
+                            a.GetComponent<Animal>().pickup.start();
                             PickUp(a);
                             break;
                         }
@@ -256,7 +265,7 @@ public class Controls : MonoBehaviour
         if (sacrificed)
         {
             Disappear();
-            transform.position -= new Vector3(0, Time.deltaTime, 0);
+            transform.position -= new Vector3(0, Time.deltaTime*3, 0);
         }
 
     }
@@ -270,6 +279,16 @@ public class Controls : MonoBehaviour
             if(carry!=null)PutDown(carry);
             GameManager.instance.Barf();
             GameManager.instance.Shake();
+            GameManager.instance.players[id] = null;
+            float playerAmount = 0;
+            for(int i = 0; i < 4; i++)
+            {
+                if (GameManager.instance.players[i] != null) playerAmount++;
+            }
+            if (playerAmount == 1)
+            {
+                GameManager.instance.Win();
+            }
             Destroy(this.gameObject);
         }
     }
@@ -281,9 +300,11 @@ public class Controls : MonoBehaviour
     {
         if (carry != null)
         {
+            if(carry.tag=="Player")carry.GetComponent<Controls>().sprite.GetComponent<SpriteRenderer>().sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
+            else carry.GetComponent<Animal>().sprite.GetComponent<SpriteRenderer>().sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
             if (carry.tag == "Animal1") speed = 4.5f;
-            if (carry.tag == "Animal2") speed = 4.0f;
-            if (carry.tag == "Animal3") speed = 3.5f;
+            if (carry.tag == "Animal2") speed = 3.5f;
+            if (carry.tag == "Animal3") speed = 3f;
             carry.transform.position = transform.position + new Vector3(0, 1.4f, 0);
         }
         else speed = 5;
@@ -348,6 +369,7 @@ public class Controls : MonoBehaviour
         }
         if (level == 3)
         {
+            GameManager.instance.endGame = true;
             GameManager.instance.MoreIntense(3);
             GameManager.instance.unlock4 = true;
         }
@@ -395,6 +417,8 @@ public class Controls : MonoBehaviour
         handicapY = 0;
         handicapX = 0;
 
+        anim.Play("player_throw_"+ faceDirection);
+
         AudioManager.instance.drop.start();
 
         transform.eulerAngles = new Vector3(0, 0, 0);
@@ -408,7 +432,8 @@ public class Controls : MonoBehaviour
                 //Player dies
                 AudioManager.instance.diePlayers[who.GetComponent<Controls>().id].start();
                 who.GetComponent<Controls>().sacrificed = true;
-                who.transform.position = hole.transform.position + new Vector3(0, 0.1f, 0);
+                who.transform.position = hole.transform.position + new Vector3(0, 0.2f, 0);
+
 
                 //Let go
                 who.GetComponent<Controls>().pickedUp = false;
@@ -419,15 +444,17 @@ public class Controls : MonoBehaviour
             if (who.tag == "Animal1" || who.tag == "Animal2" || who.tag == "Animal3")
             {
                 who.GetComponent<Animal>().sacrificed = true;
-                who.transform.position = hole.transform.position + new Vector3(0, 0.1f, 0);
+                who.transform.position = hole.transform.position + new Vector3(0, 0.2f, 0);
                 who.GetComponent<Animal>().pickedUp = false;
                 carry = null;
             }
             //Leveling
             if(who.tag=="Animal1")//Threw in chicken
             {
+                GameManager.instance.intro = false;
+                GameManager.instance.pitButtonA.GetComponent<SpriteRenderer>().enabled = false;
                 GameManager.instance.MoreIntense(1);//Try to increase? to 1
-                AudioManager.instance.die1.start();
+                who.GetComponent<Animal>().die.start();
                 if (level == 0)
                 {
                     progress += 0.34f;
@@ -440,7 +467,7 @@ public class Controls : MonoBehaviour
             }
             if (who.tag == "Animal2")//Threw in boar
             {
-                AudioManager.instance.die2.start();
+                who.GetComponent<Animal>().die.start();
                 if (level == 1)
                 {
                     progress += 0.5f;
@@ -453,7 +480,7 @@ public class Controls : MonoBehaviour
             }
             if (who.tag == "Animal3")//Threw in bull
             {
-                AudioManager.instance.die3.start();
+                who.GetComponent<Animal>().die.start();
                 if (level == 2)
                 {
                     progress += 1f;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using FMODUnity;
 
 [RequireComponent(typeof(PolyNavAgent))]
 public class Animal : MonoBehaviour {
@@ -15,6 +16,11 @@ public class Animal : MonoBehaviour {
         }
     }
 
+    public FMOD.Studio.EventInstance pickup;
+    public FMOD.Studio.EventInstance die;
+    public FMOD.Studio.EventInstance pickupFX;
+    public FMOD.Studio.EventInstance dropFX;
+
     public bool pickedUp = false;
     public GameObject carrier;
     float direction = 1;
@@ -27,6 +33,28 @@ public class Animal : MonoBehaviour {
 
     void Awake()
     {
+        //FMOD
+        pickupFX = RuntimeManager.CreateInstance("event:/Sounds/Players/Pickup_sound");
+        dropFX = RuntimeManager.CreateInstance("event:/Sounds/Players/Drop_sound");
+
+        if(tag=="Animal1")
+        {
+            pickup = RuntimeManager.CreateInstance("event:/Sounds/Animals/Chicken_Pickup");
+            die = RuntimeManager.CreateInstance("event:/Sounds/Animals/Chicken_Die");
+        }
+        if (tag == "Animal2")
+        {
+            pickup = RuntimeManager.CreateInstance("event:/Sounds/Animals/Pig_Pickup");
+            die = RuntimeManager.CreateInstance("event:/Sounds/Animals/Pig_Die");
+        }
+        if (tag == "Animal3")
+        {
+            pickup = RuntimeManager.CreateInstance("event:/Sounds/Animals/Bison_Pickup");
+            die = RuntimeManager.CreateInstance("event:/Sounds/Animals/Bison_Die");
+        }
+
+
+        hole = GameObject.Find("hole");
         originRotation = transform.rotation;
         spawn = true;
         StartCoroutine(WiggleNum());
@@ -107,6 +135,15 @@ public class Animal : MonoBehaviour {
         speedChecker++;
     }
 
+    public GameObject hole;
+    bool nearHole()
+    {
+        if (Mathf.Abs(transform.position.x - hole.transform.position.x) < 2.5f && Mathf.Abs(transform.position.y - hole.transform.position.y) < 1.5f)
+            return true;
+
+        return false;
+    }
+
     bool intro = true;
     void Update ()
     {
@@ -119,6 +156,13 @@ public class Animal : MonoBehaviour {
                 intro = false;
                 ButtonA.enabled = false;
             }
+        }
+
+        if(GameManager.instance.finished && nearHole() && !sacrificed)
+        {
+            sacrificed = true;
+            transform.position = hole.transform.position + new Vector3(0, 0.2f, 0);
+            pickedUp = false;
         }
 
         //Wiggle();
@@ -145,7 +189,7 @@ public class Animal : MonoBehaviour {
         if (sacrificed)
         {
             Disappear();
-            transform.position -= new Vector3(0, Time.deltaTime, 0);
+            transform.position -= new Vector3(0, Time.deltaTime*3, 0);
         }
 
     }
@@ -196,32 +240,39 @@ public class Animal : MonoBehaviour {
     {
         yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
 
-        if (!pickedUp)
+        if (GameManager.instance.finished)
         {
-            runAway = false;
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            foreach(GameObject p in players)
+            agent.SetDestination(GameObject.Find("hole").transform.position);
+        }
+        else
+        {
+            if (!pickedUp)
             {
-                //Debug.Log("AAAAAAAHHHH");
-                float xAway = (p.transform.position.x - transform.position.x) * -1;
-                float yAway = (p.transform.position.y - transform.position.y) * -1;
-                if (Vector2.Distance(p.transform.position, transform.position)<2)
+                runAway = false;
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                foreach (GameObject p in players)
                 {
-                    agent.maxSpeed = 6;
-                    runAway = true;
-                    agent.SetDestination(transform.position + new Vector3(xAway*3, yAway*3, 0));
-                    break;
+                    //Debug.Log("AAAAAAAHHHH");
+                    float xAway = (p.transform.position.x - transform.position.x) * -1;
+                    float yAway = (p.transform.position.y - transform.position.y) * -1;
+                    if (Vector2.Distance(p.transform.position, transform.position) < 2)
+                    {
+                        agent.maxSpeed = 6;
+                        runAway = true;
+                        agent.SetDestination(transform.position + new Vector3(xAway * 3, yAway * 3, 0));
+                        break;
+                    }
                 }
-            }
-            if (!runAway)
-            {
-                agent.maxSpeed = 4;
-                agent.SetDestination(transform.position + new Vector3(Random.Range(-2.0f, 2.0f), Random.Range(-2.0f, 2.0f), 0));
+                if (!runAway)
+                {
+                    agent.maxSpeed = 4;
+                    agent.SetDestination(transform.position + new Vector3(Random.Range(-2.0f, 2.0f), Random.Range(-2.0f, 2.0f), 0));
+                }
             }
         }
 
-
         StartCoroutine(ChooseDestination());
+        
 
     }
 }
