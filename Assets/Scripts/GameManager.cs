@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour {
         music.start();
         music.setParameterValue("Tension", 0);
 
-        barf = RuntimeManager.CreateInstance("event:/Sounds/Erupt");
+        barf = RuntimeManager.CreateInstance("event:/Sounds/Erupt_Human");
         intro = true;
 
     }
@@ -209,9 +209,12 @@ public class GameManager : MonoBehaviour {
 
 
     public GameObject barfVFX;
-    public void Barf()
+    public void Barf(GameObject offer)
     {
-        barfVFX.GetComponent<Animator>().Play("barf");
+        if(offer.tag=="Animal1")barfVFX.GetComponent<Animator>().Play("barf1");
+        if(offer.tag=="Animal2")barfVFX.GetComponent<Animator>().Play("barf");
+        if(offer.tag=="Animal3")barfVFX.GetComponent<Animator>().Play("barf3");
+        if(offer.tag=="Player")barfVFX.GetComponent<Animator>().Play("barf4");
         barf.start();
     }
 

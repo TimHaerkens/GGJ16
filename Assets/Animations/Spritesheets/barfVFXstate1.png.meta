@@ -1,13 +1,19 @@
 fileFormatVersion: 2
 guid: d72dba11b826ded4c8675ef6030d2eb5
-timeCreated: 1454209122
+timeCreated: 1454214195
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: barfVFXstate1_0
+    21300002: barfVFXstate1_1
+    21300004: barfVFXstate1_2
+    21300006: barfVFXstate1_3
+    21300008: barfVFXstate1_4
+    21300010: barfVFXstate1_5
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -26,11 +32,11 @@ TextureImporter:
   cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
-    filterMode: -1
-    aniso: -1
+    filterMode: 0
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -38,7 +44,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -49,7 +55,220 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: barfVFXstate1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 240.5
+        width: 170
+        height: 240.5
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -4, y: 90.20001}
+        - {x: -15, y: 57.200012}
+        - {x: -19, y: 39.200012}
+        - {x: -18, y: 36.200012}
+        - {x: -16, y: 34.200012}
+        - {x: -19, y: 36.200012}
+        - {x: -19, y: 47.200012}
+        - {x: -24, y: 59.200012}
+        - {x: -32, y: 66.20001}
+        - {x: -41, y: 62.200012}
+        - {x: -41, y: 43.200012}
+        - {x: -31, y: -13.799988}
+        - {x: -18, y: -23.799988}
+        - {x: 24, y: -23.799988}
+        - {x: 33, y: -21.799988}
+        - {x: 46, y: 17.200012}
+        - {x: 46, y: 57.200012}
+        - {x: 27, y: 90.20001}
+      - - {x: -44, y: 40.200012}
+        - {x: -46, y: 38.200012}
+        - {x: -46, y: 35.200012}
+        - {x: -44, y: 33.200012}
+        - {x: -41, y: 33.200012}
+        - {x: -39, y: 35.200012}
+        - {x: -39, y: 37.200012}
+        - {x: -42, y: 40.200012}
+      - - {x: 43, y: 40.200012}
+        - {x: 43, y: 34.200012}
+        - {x: 49, y: 34.200012}
+        - {x: 49, y: 38.200012}
+        - {x: 48, y: 40.200012}
+      - - {x: 60, y: 60.200012}
+        - {x: 60, y: 55.200012}
+        - {x: 62, y: 54.200012}
+        - {x: 66, y: 54.200012}
+        - {x: 67, y: 55.200012}
+        - {x: 67, y: 60.200012}
+      - - {x: -48, y: 61.200012}
+        - {x: -50, y: 59.200012}
+        - {x: -50, y: 57.200012}
+        - {x: -48, y: 55.200012}
+        - {x: -45, y: 55.200012}
+        - {x: -43, y: 57.200012}
+        - {x: -43, y: 59.200012}
+        - {x: -45, y: 61.200012}
+    - name: barfVFXstate1_1
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 240.5
+        width: 170
+        height: 240.5
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21, y: 110.20001}
+        - {x: -48, y: 83.20001}
+        - {x: -70, y: 38.200012}
+        - {x: -70, y: 3.2000122}
+        - {x: -18, y: -23.799988}
+        - {x: 33, y: -23.799988}
+        - {x: 67, y: 5.200012}
+        - {x: 67, y: 41.200012}
+        - {x: 24, y: 110.20001}
+      - - {x: -24, y: 105.20001}
+        - {x: -29, y: 105.20001}
+        - {x: -29, y: 83.20001}
+        - {x: -26, y: 82.20001}
+        - {x: -23, y: 82.20001}
+        - {x: -22, y: 84.20001}
+        - {x: -22, y: 104.20001}
+      - - {x: 9, y: 111.20001}
+        - {x: 11, y: 108.20001}
+        - {x: 16, y: 108.20001}
+        - {x: 16, y: 118.20001}
+        - {x: 15, y: 119.20001}
+        - {x: 10, y: 119.20001}
+        - {x: 9, y: 118.20001}
+    - name: barfVFXstate1_2
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 240.5
+        width: 170
+        height: 240.5
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 19, y: 149.20001}
+        - {x: 12, y: 164.20001}
+        - {x: 4, y: 164.20001}
+        - {x: 0, y: 163.20001}
+        - {x: -18, y: 155.20001}
+        - {x: -34, y: 131.20001}
+        - {x: -48, y: 56.200012}
+        - {x: -48, y: -23.799988}
+        - {x: 30, y: -23.799988}
+        - {x: 51, y: -2.7999878}
+        - {x: 51, y: 29.200012}
+        - {x: 48, y: 34.200012}
+    - name: barfVFXstate1_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0.5
+        width: 170
+        height: 240.5
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -54, y: 62.199997}
+        - {x: -54, y: -23.800003}
+        - {x: 51, y: -23.800003}
+        - {x: 51, y: 170.2}
+        - {x: 49, y: 206.2}
+        - {x: -22, y: 206.2}
+        - {x: -24, y: 205.2}
+    - name: barfVFXstate1_4
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 0.5
+        width: 170
+        height: 240.5
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -38, y: 206.2}
+        - {x: -45, y: 166.2}
+        - {x: -45, y: -17.800003}
+        - {x: -33, y: -23.800003}
+        - {x: 39, y: -23.800003}
+        - {x: 50, y: -3.800003}
+        - {x: 50, y: 68.2}
+        - {x: 21, y: 206.2}
+      - - {x: -67, y: 19.199997}
+        - {x: -67, y: 14.199997}
+        - {x: -59, y: 7.199997}
+        - {x: -57, y: 7.199997}
+        - {x: -55, y: 8.199997}
+        - {x: -55, y: 14.199997}
+        - {x: -61, y: 19.199997}
+      - - {x: 51, y: 17.199997}
+        - {x: 53, y: 15.199997}
+        - {x: 58, y: 18.199997}
+        - {x: 57, y: 21.199997}
+        - {x: 53, y: 21.199997}
+        - {x: 51, y: 19.199997}
+      - - {x: 48, y: 30.199997}
+        - {x: 45, y: 27.199997}
+        - {x: 45, y: 24.199997}
+        - {x: 47, y: 22.199997}
+        - {x: 56, y: 25.199997}
+        - {x: 58, y: 27.199997}
+        - {x: 57, y: 30.199997}
+        - {x: 52, y: 31.199997}
+      - - {x: -48, y: 35.199997}
+        - {x: -48, y: 32.199997}
+        - {x: -43, y: 28.199997}
+        - {x: -41, y: 28.199997}
+        - {x: -38, y: 31.199997}
+        - {x: -39, y: 34.199997}
+        - {x: -46, y: 37.199997}
+      - - {x: 50, y: 36.199997}
+        - {x: 53, y: 37.199997}
+        - {x: 53, y: 40.199997}
+        - {x: 50, y: 41.199997}
+        - {x: 48, y: 39.199997}
+    - name: barfVFXstate1_5
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 0.5
+        width: 170
+        height: 240.5
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 17, y: 206.2}
+        - {x: -15, y: 206.2}
+        - {x: -53, y: 175.2}
+        - {x: -53, y: -23.800003}
+        - {x: 42, y: -23.800003}
+        - {x: 54, y: 10.199997}
+        - {x: 54, y: 63.199997}
+        - {x: 28, y: 196.2}
+      - - {x: -78, y: 18.199997}
+        - {x: -77, y: 15.199997}
+        - {x: -74, y: 15.199997}
+        - {x: -72, y: 17.199997}
+        - {x: -73, y: 20.199997}
+        - {x: -76, y: 20.199997}
+      - - {x: 66, y: 21.199997}
+        - {x: 69, y: 22.199997}
+        - {x: 69, y: 25.199997}
+        - {x: 66, y: 26.199997}
+        - {x: 64, y: 24.199997}
     outline: []
   spritePackingTag: 
   userData: 

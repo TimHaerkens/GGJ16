@@ -178,7 +178,7 @@ public class Controls : MonoBehaviour
             Face();
         }
 
-        if (GameManager.instance.endGame)
+        if (GameManager.instance.endGame && !GameManager.instance.finished)
         {
             ButtonA.enabled = true;
             ButtonA.sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
@@ -277,7 +277,7 @@ public class Controls : MonoBehaviour
         if (currColor.a <= 0)
         {
             if(carry!=null)PutDown(carry);
-            GameManager.instance.Barf();
+            GameManager.instance.Barf(this.gameObject);
             GameManager.instance.Shake();
             GameManager.instance.players[id] = null;
             float playerAmount = 0;

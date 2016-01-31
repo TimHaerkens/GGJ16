@@ -170,6 +170,7 @@ public class Animal : MonoBehaviour {
         {
             agent.enabled = false;
             if (!spawn && tag == "Animal1") anim.Play("bird_carried");
+            if (!spawn && tag == "Animal2") anim.Play("boar_carried");
         }
         else
         {
@@ -200,7 +201,7 @@ public class Animal : MonoBehaviour {
         sprite.GetComponent<SpriteRenderer>().color = new Color(currColor.r, currColor.g, currColor.b, currColor.a - Time.deltaTime*4);
         if(currColor.a <= 0)
         {
-            GameManager.instance.Barf();
+            GameManager.instance.Barf(this.gameObject);
             GameManager.instance.Shake();
             Destroy(this.gameObject);
         }
