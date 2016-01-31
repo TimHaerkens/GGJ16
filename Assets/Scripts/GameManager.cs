@@ -109,6 +109,7 @@ public class GameManager : MonoBehaviour {
             }
             if (potentialSpot != -1)
             {
+                AudioManager.instance.playerready[potentialSpot].start();
                 controllers[potentialSpot] = InputManager.ActiveDevice;
                 playerAmount += 1;
                 Debug.Log("Assigned to " + potentialSpot);
@@ -169,7 +170,7 @@ public class GameManager : MonoBehaviour {
     {
         originPosition = Camera.main.transform.position;
         originRotation = Camera.main.transform.rotation;
-        shake_intensity = .02f;
+        shake_intensity += .02f;
         shake_decay = 0.0003f;
     }
 
@@ -199,6 +200,7 @@ public class GameManager : MonoBehaviour {
     //Spawning animals
     public bool unlock2 = false;//Unlock boars
     public bool unlock3 = false;//Unlock bizons
+    public bool unlock4 = false;//Unlock more endbosses
     IEnumerator SpawnAnimal()
     {
         yield return new WaitForSeconds(Random.Range(1,4));
@@ -207,9 +209,9 @@ public class GameManager : MonoBehaviour {
         GameObject[] animals2 = GameObject.FindGameObjectsWithTag("Animal2");
         GameObject[] animals3 = GameObject.FindGameObjectsWithTag("Animal3");
 
-        float probability1 = 60-(animals1.Length*15);
-        float probability2 = 0; if(unlock2) probability2 = 20 - (animals2.Length * 7);
-        float probability3 = 0; if(unlock3) probability3 = 3 -(animals3.Length*3);
+        float probability1 = 60-(animals1.Length*15); if (unlock2) probability1 = 40 - (animals1.Length * 20);
+            float probability2 = 0; if(unlock2) probability2 = 20 - (animals2.Length * 7);
+        float probability3 = 0; if(unlock3) probability3 = 3 -(animals3.Length*3); if (unlock4) probability3 = 10 - (animals3.Length * 10);
 
         
 

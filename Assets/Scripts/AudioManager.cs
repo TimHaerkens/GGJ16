@@ -18,6 +18,10 @@ public class AudioManager : MonoBehaviour {
     public FMOD.Studio.EventInstance pickup;
     public FMOD.Studio.EventInstance drop;
 
+    public FMOD.Studio.EventInstance[] playerready = new FMOD.Studio.EventInstance[4];
+
+
+
 
 
     FMOD.Studio.ParameterInstance pan;
@@ -61,6 +65,12 @@ public class AudioManager : MonoBehaviour {
         pickupPlayers[1] = RuntimeManager.CreateInstance("event:/Sounds/Players/Player2_Pickup");
         pickupPlayers[2] = RuntimeManager.CreateInstance("event:/Sounds/Players/Player3_Pickup");
         pickupPlayers[3] = RuntimeManager.CreateInstance("event:/Sounds/Players/Player4_Pickup");
+
+        playerready[0] = RuntimeManager.CreateInstance("event:/Sounds/Animals/Announcer/Player 1");
+        playerready[1] = RuntimeManager.CreateInstance("event:/Sounds/Animals/Announcer/Player 2");
+        playerready[2] = RuntimeManager.CreateInstance("event:/Sounds/Animals/Announcer/Player 3");
+        playerready[3] = RuntimeManager.CreateInstance("event:/Sounds/Animals/Announcer/Player 4");
+
 
         //diePlayers[3].start();
     }

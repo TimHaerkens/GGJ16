@@ -135,13 +135,24 @@ public class Controls : MonoBehaviour
         walkDirection = newZ;
     }
 
+    float freedom = 0;
+    float freedomMinimum = 50;
     void Update()
     {
+
 
         if (pickedUp || sacrificed)
         {
             //if (carry) PutDown(carry);
             agent.enabled = false;
+
+            if (!sacrificed)
+            {
+                //Wiggle free
+                freedom += Mathf.Abs(inputDevice.LeftStickY) + Mathf.Abs(inputDevice.LeftStickX);
+                if (freedom > freedomMinimum) Free();
+                Carry();
+            }
         }
         else
         {
@@ -249,6 +260,7 @@ public class Controls : MonoBehaviour
         sprite.GetComponent<SpriteRenderer>().color = new Color(currColor.r, currColor.g, currColor.b, currColor.a - Time.deltaTime * 4);
         if (currColor.a <= 0)
         {
+            if(carry!=null)PutDown(carry);
             GameManager.instance.Barf();
             GameManager.instance.Shake();
             Destroy(this.gameObject);
@@ -260,10 +272,14 @@ public class Controls : MonoBehaviour
 
     void Carry()
     {
-        if(carry!=null)
+        if (carry != null)
         {
+            if (carry.tag == "Animal1") speed = 4.5f;
+            if (carry.tag == "Animal2") speed = 4.0f;
+            if (carry.tag == "Animal3") speed = 3.5f;
             carry.transform.position = transform.position + new Vector3(0, 1.4f, 0);
         }
+        else speed = 5;
     }
 
     float handicapX = 0;
@@ -314,6 +330,7 @@ public class Controls : MonoBehaviour
         UpdateVisuals();
         if (level == 1) { GameManager.instance.unlock2 = true; Debug.Log("Unlock 2"); }
         if (level == 2) { GameManager.instance.unlock3 = true; Debug.Log("Unlock 3"); }
+        if (level == 3) { GameManager.instance.unlock4 = true; Debug.Log("Unlock 4"); }
         if (level == 3) GameManager.instance.music.setParameterValue("Tension", 1);
         
     }
@@ -368,12 +385,15 @@ public class Controls : MonoBehaviour
         {
             if (who.tag == "Player")//Threw in player
             {
+                //Player dies
                 AudioManager.instance.diePlayers[who.GetComponent<Controls>().id].start();
                 who.GetComponent<Controls>().sacrificed = true;
                 who.transform.position = hole.transform.position + new Vector3(0, 0.1f, 0);
+
+                //Let go
                 who.GetComponent<Controls>().pickedUp = false;
-                carry = null;
                 who.GetComponent<Controls>().carrier = null;
+                carry = null;
                 //This player is now out of the game                
             }
             if (who.tag == "Animal1" || who.tag == "Animal2" || who.tag == "Animal3")
@@ -442,6 +462,15 @@ public class Controls : MonoBehaviour
                 carry = null;
             }
         }
+    }
+
+    void Free()
+    {
+        freedom = 0;
+        transform.position = transform.position + new Vector3(0.18f, -0.1f, 0);
+        pickedUp = false;
+        carrier.GetComponent<Controls>().carry = null;
+        carrier = null;
     }
 
     

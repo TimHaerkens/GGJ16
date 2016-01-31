@@ -42,7 +42,9 @@ public class Animal : MonoBehaviour {
             if (transform.position.x > 0)
             {
                 transform.position -= new Vector3(Time.deltaTime * 3, 0, 0);
-                anim.Play("bird_walkSW");
+                if (tag == "Animal1") anim.Play("bird_walk" + faceDirection);
+                if (tag == "Animal2") anim.Play("boar_walk" + faceDirection);
+                if (tag == "Animal3") anim.Play("bison_walk" + faceDirection);
             }
             spawnMove -= Time.deltaTime;
         }
@@ -68,11 +70,15 @@ public class Animal : MonoBehaviour {
 
         if(walking)
         {
-            anim.Play("bird_walk" + faceDirection);
+            if(tag=="Animal1")anim.Play("bird_walk" + faceDirection);
+            if(tag=="Animal2")anim.Play("boar_walk" + faceDirection);
+            if(tag=="Animal3")anim.Play("bison_walk" + faceDirection);
         }
         else
         {
-            anim.Play("bird_idle" + faceDirection);
+            if (tag == "Animal1") anim.Play("bird_idle" + faceDirection);
+            if (tag == "Animal2") anim.Play("boar_idle" + faceDirection);
+            if (tag == "Animal3") anim.Play("bison_idle" + faceDirection);
         }
 
 
