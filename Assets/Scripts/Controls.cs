@@ -23,7 +23,7 @@ public class Controls : MonoBehaviour
     //Character stats
     public int id = 0;
     float speed = 5f; //How fast the player can go
-    float range = 1f; //Pickup range
+    float range = 1.3f; //Pickup range
     public float level = 0;
     float progress = 0;
 
@@ -109,6 +109,7 @@ public class Controls : MonoBehaviour
     [System.NonSerialized]
     public string faceDirection = "SE";
     public bool walking;
+    public bool knockedOut = false;
     void Face()
     {
         //FACE DIRECTION
@@ -117,7 +118,7 @@ public class Controls : MonoBehaviour
         else if (walkDirection < 180 && walkDirection > 90) faceDirection = "SW";
         else if (walkDirection < 90 && walkDirection > 0) faceDirection = "NW";
 
-        if (walking && !anim.GetCurrentAnimatorStateInfo(0).IsTag("throw"))
+        if (walking && !anim.GetCurrentAnimatorStateInfo(0).IsTag("throw") && !knockedOut)
         {
             if(carry)anim.Play("player_tilWalk" + faceDirection);
             else anim.Play("player_walk" + faceDirection);
@@ -149,18 +150,22 @@ public class Controls : MonoBehaviour
     }
 
     float freedom = 0;
-    float freedomMinimum = 150;
+    float freedomMinimum = 100;
     float wiggleBend = 0;
     void Update()
     {
+        if(carry==null)
+        {
+            handicapY = 0;
+            handicapX = 0;
+        }
 
-
-        if (pickedUp || sacrificed)
+        if (pickedUp || sacrificed || knockedOut)
         {
             //if (carry) PutDown(carry);
             agent.enabled = false;
 
-            if (!sacrificed)
+            if (!sacrificed && !knockedOut)
             {
                 //Wiggle free
                 wiggleBend += inputDevice.LeftStickX*4;
@@ -279,6 +284,24 @@ public class Controls : MonoBehaviour
         }
 
     }
+
+    float push = 0;
+    void KnockOut(GameObject byWho)
+    {
+        knockedOut = true;
+        Debug.Log(gameObject.name + " knocked out by " + byWho.name);
+        if (byWho.transform.position.x > transform.position.x)//right of me
+        {
+            anim.Play("player_fallW");
+            push = -1;
+        }
+        else
+        {
+            anim.Play("player_fallE");
+            push = 1;
+        }
+    }
+    
 
     void Disappear()
     {
@@ -407,6 +430,7 @@ public class Controls : MonoBehaviour
             if (who.GetComponent<Animal>().pickedUp)//Someone is carrying it already
             {
                 //Steal
+                who.GetComponent<Animal>().carrier.GetComponent<Controls>().KnockOut(this.gameObject);
                 who.GetComponent<Animal>().carrier.GetComponent<Controls>().carry = null;
                 who.GetComponent<Animal>().pickedUp = true;
                 who.GetComponent<Animal>().carrier = this.gameObject;

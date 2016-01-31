@@ -62,7 +62,7 @@ public class Animal : MonoBehaviour {
     }
 
     bool spawn;
-    float spawnMove = 1f;
+    float spawnMove = 2f;
     void Spawn()
     {
         if (spawnMove > 0)
@@ -71,9 +71,18 @@ public class Animal : MonoBehaviour {
             if (transform.position.x > 0)
             {
                 transform.position -= new Vector3(Time.deltaTime * 3, 0, 0);
-                if (tag == "Animal1") anim.Play("bird_walk" + faceDirection);
-                if (tag == "Animal2") anim.Play("boar_walk" + faceDirection);
-                if (tag == "Animal3") anim.Play("bison_walk" + faceDirection);
+                if (hole.transform.position.x < transform.position.x)
+                {
+                    if (tag == "Animal1") anim.Play("bird_walkSW");
+                    if (tag == "Animal2") anim.Play("boar_walkSW");
+                    if (tag == "Animal3") anim.Play("yak_walkSW");
+                }
+                else
+                {
+                    if (tag == "Animal1") anim.Play("bird_walkSE");
+                    if (tag == "Animal2") anim.Play("boar_walkSE");
+                    if (tag == "Animal3") anim.Play("yak_walkSE");
+                }
             }
             spawnMove -= Time.deltaTime;
         }
@@ -101,13 +110,13 @@ public class Animal : MonoBehaviour {
         {
             if(tag=="Animal1")anim.Play("bird_walk" + faceDirection);
             if(tag=="Animal2")anim.Play("boar_walk" + faceDirection);
-            if(tag=="Animal3")anim.Play("bison_walk" + faceDirection);
+            if(tag=="Animal3")anim.Play("yak_walk" + faceDirection);
         }
         else
         {
             if (tag == "Animal1") anim.Play("bird_idle" + faceDirection);
             if (tag == "Animal2") anim.Play("boar_idle" + faceDirection);
-            if (tag == "Animal3") anim.Play("bison_idle" + faceDirection);
+            if (tag == "Animal3") anim.Play("yak_idle" + faceDirection);
         }
 
 
@@ -171,6 +180,7 @@ public class Animal : MonoBehaviour {
             agent.enabled = false;
             if (!spawn && tag == "Animal1") anim.Play("bird_carried");
             if (!spawn && tag == "Animal2") anim.Play("boar_carried");
+            if (!spawn && tag == "Animal3") anim.Play("yak_carried");
         }
         else
         {

@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour {
     public GameObject[] animalSpawns;//Animals that can be spawned
     public GameObject player;//A player that can be spawned
 
-    public GameObject pitButtonA;    public GameObject pixelCamera;//Vignette effect overlay    public bool endGame = false;
+    public GameObject pitButtonA;    public GameObject pixelCamera;//Vignette effect overlay    public bool endGame = false;    public bool firstBison;
 
     #region singleton
     private static GameManager Instance;
@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour {
     public bool intro;
     void Awake()
     {
+        firstBison = true;
         if (Instance == null)Instance = this;
         else
         {
@@ -183,6 +184,8 @@ public class GameManager : MonoBehaviour {
 
     void StartGame()
     {
+        RuntimeManager.PlayOneShot("event:/Sounds/Animals/Announcer/START", transform.position);
+
         countdown.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         for (int i = 0; i < playerAmount;i++)
         {
@@ -196,6 +199,7 @@ public class GameManager : MonoBehaviour {
     }
 
     float finishTimer = 14;
+    bool eagle = true;
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space))
@@ -209,10 +213,15 @@ public class GameManager : MonoBehaviour {
         ScreenShake();
         if(characterSelect)CharacterSelect();
 
-        if(finished)
+        if (finished)
         {
             finishTimer -= Time.deltaTime;
-            if(finishTimer < 7)logo.transform.position -= new Vector3(0, (logo.transform.position.y-1)/50, 0);
+            if (finishTimer < 7) logo.transform.position -= new Vector3(0, (logo.transform.position.y - 1) / 50, 0);
+            if (finishTimer < 7 && eagle)
+            {
+                RuntimeManager.PlayOneShot("event:/Sounds/Animals/Eagle", Camera.main.transform.position);
+                eagle = false;
+            }
             if (finishTimer <= 0) Application.LoadLevel(Application.loadedLevel);
         }
     }
